@@ -27,6 +27,8 @@ The next step is to run `DSI.py` file (using the Python interpreter located at t
 /opt/miniconda3/envs/dsi/bin/python DSI.py 
 ```
 
+Note: I have updated the input and output csv file in `DSI.py` file to `\user_text` folder.
+
 ## References
 ```
 @article{johnson2023divergent,
