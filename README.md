@@ -1,4 +1,4 @@
-# Divergent Semantic Integration Calculation Code
+# Code to Calculate Divergent Semantic Integration (DSI)
 This repository contains code from Johnson et al.'s (2022) paper **Divergent semantic integration (DSI): Extracting creativity from narratives with distributional semantic modeling**.
 
 ## Github Repo Navigation
