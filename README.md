@@ -17,6 +17,11 @@ After installing miniconda, the first step is to create the virtual environment:
 conda env create -f environment.yml
 ```
 
+The next step is to activate the created environment:
+```bash
+conda activate dsi
+```
+
 The next step is to run `DSI.py` file (using the Python interpreter located at the virtual environment):
 ```bash
 /opt/miniconda3/envs/dsi/bin/python DSI.py 
