@@ -1,0 +1,17 @@
+name: dsi
+channels:
+  - anaconda
+  - pytorch
+  - defaults
+dependencies:
+  - pytorch
+  - torchvision
+  - torchaudio
+  - cpuonly
+  - pandas
+  - nltk
+  - python=3.9.7
+  - pip # add pip also as a dependency
+  - pip:
+    - transformers
+prefix: /opt/miniconda3/envs/dsi # '/opt/' as the path to your miniconda3 installation 
