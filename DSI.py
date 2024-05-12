@@ -20,7 +20,8 @@ import time
 import torch
 
 # USER EDIT
-filename = "study1_OSF FINAL.csv"
+filename = "user_text/test.csv"
+output_path = "user_text/DSI_output.csv.csv"
 
 # INITIALIZE BERT AND TOKENIZERS
 model = BertModel.from_pretrained("bert-large-uncased", output_hidden_states = True) # initialize BERT model instance
@@ -31,7 +32,7 @@ cos = torch.nn.CosineSimilarity(dim = 0)
 
 # LOAD DATA
 d = pd.read_csv(filename, usecols = ["ID","Story"])
-d = d.head(1) # you can uncomment this if you want to do a trial run with only the first participant's story instead of the whole dataset
+# d = d.head(1) # you can uncomment this if you want to do a trial run with only the first participant's story instead of the whole dataset
 out_df = pd.read_csv(filename)
 
 # CREATE STORAGE DICTIONARY # keys = participant IDs
@@ -88,6 +89,6 @@ for index, row in d.iterrows():
 dsi_df = pd.DataFrame.from_dict(s, orient = "index") # make pandas dataframe from DSI dictionary
 dsi_df["ID"] = dsi_df.index
 out_df = out_df.merge(dsi_df,left_on="ID", right_on="ID") # add DSI column to input dataframe
-out_df.to_csv('DSI_output.csv', index = False) # save updated dataframe
+out_df.to_csv(output_path, index = False) # save updated dataframe
 elapsed_time = time.time()-start_time # get elapsed time to compute DSI values
 print('elapsed time: ' + str(elapsed_time)) # display elapsed time (in seconds)
