@@ -24,7 +24,7 @@ conda activate dsi
 
 The next step is to run `DSI.py` file (using the Python interpreter located at the virtual environment):
 ```bash
-/opt/miniconda3/envs/dsi/bin/python DSI.py 
+python DSI.py 
 ```
 
 Note: I have updated the input and output csv file in `DSI.py` file to `\user_text` folder.
