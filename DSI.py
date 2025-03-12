@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 """
 
 All code in this file is licensed to John D. Patterson from The Pennsylvania State University, 04-04-2022, under the Creative Commons Attribution-NonCommerical-ShareAlike 4.0 International (CC BY-NC-SA 4.0)
@@ -46,10 +48,12 @@ cos = torch.nn.CosineSimilarity(dim = 0)
 # LOAD AND COMBINE DATA FROM ALL BATCHES
 all_data = []
 for batch_folder in Path(input_path).glob("batch_*"):
+    batch_name = os.path.basename(batch_folder)
     batch_file = os.path.join(batch_folder, "processed_data.csv")
 
     # Read batch data
     batch_data = pd.read_csv(batch_file)
+    batch_data["batch_name"] = batch_name
     all_data.append(batch_data)
 
 # Combine all batches
@@ -68,9 +72,10 @@ for index, row in d.iterrows():
     ID = row["worker_id"]
     text = row["narrative"]
     drawing_group = row["drawing_group"]
+    batch_name = row["batch_name"]
     
     # Create unique identifier for each narrative
-    narrative_id = f"{ID}_{drawing_group}"
+    narrative_id = f"{batch_name}|{ID}|{drawing_group}"
     
     # Skip if narrative is missing or empty
     if pd.isna(text) or text.strip() == "":
@@ -139,9 +144,21 @@ for index, row in d.iterrows():
 dsi_df = pd.DataFrame.from_dict(s, orient="index")
 
 # Split the index and add the drawing_group prefix back
-dsi_df["worker_id"] = dsi_df.index.str.split("_Incomplete_Group_").str[0]
-dsi_df["drawing_group"] = "Incomplete_Group_" + dsi_df.index.str.split("_Incomplete_Group_").str[1]
-dsi_df = dsi_df.reset_index(drop=True)[["worker_id", "drawing_group", "DSI"]]
+# 1) Convert the index to a Series so we can do string operations
+split_series = dsi_df.index.to_series().str.split("|", expand=True)
+
+# 2) The result is a DataFrame with three columns (0, 1, 2),
+#    corresponding to batch_name, worker_id, drawing_group.
+dsi_df["batch_name"] = split_series[0]
+dsi_df["worker_id"]  = split_series[1]
+dsi_df["drawing_group"] = split_series[2]
+
+# 3) Reorder columns (including "DSI" if that's in your DataFrame)
+dsi_df = dsi_df.reset_index(drop=True)[["batch_name", "worker_id", "drawing_group", "DSI"]]
+
+# dsi_df["worker_id"] = dsi_df.index.str.split("_Incomplete_Group_").str[0]
+# dsi_df["drawing_group"] = "Incomplete_Group_" + dsi_df.index.str.split("_Incomplete_Group_").str[1]
+# dsi_df = dsi_df.reset_index(drop=True)[["worker_id", "drawing_group", "DSI"]]
 
 # Save to CSV
 output_file = os.path.join(output_path, "DSI_output.csv")
